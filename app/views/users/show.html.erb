@@ -1,5 +1,9 @@
 <p id="notice"><%= notice %></p>
 
+
+<%if @user.admin %>
+  <p>ADMIN</p>
+<% end %>
 <p>
   <strong>Name:</strong>
   <%= @user.name %>
@@ -31,4 +35,6 @@
 </p>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<%= link_to 'Back', users_path %> |
+<%= link_to 'See attractions', attractions_path %> |
+<%= link_to "Log Out", signout_path %>

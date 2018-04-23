@@ -10,11 +10,20 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    if logged_in?
+      @user = User.find(params[:id])
+    else
+      redirect_to root_path
+    end
   end
 
   # GET /users/new
   def new
-    @user = User.new
+    if logged_in?
+      redirect_to user_path(current_user) 
+    else
+      @user = User.new
+    end
   end
 
   # GET /users/1/edit
@@ -25,11 +34,10 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-
     respond_to do |format|
       if @user.save
         session[:user_id] = @user.id
-        format.html { redirect_to user_path(@user), notice: 'User was successfully created.' }
+        format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -70,6 +78,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :tickets, :password, :password_confirmation, :nausea, :happiness, :height)
+      params.require(:user).permit(:name, :password, :nausea, :happiness, :tickets, :height, :admin)
     end
 end
